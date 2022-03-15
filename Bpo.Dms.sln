@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bpo.Dms.WebApp", "src\Bpo.Dms.WebApp\Bpo.Dms.WebApp.csproj", "{026BE97A-FB9A-46ED-AD39-C16393DFF4B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{35648C8A-AB20-47E5-BF9C-250D46657664}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "manage", "manage", "{45E6FF57-6560-4AA7-A4F2-31332515D20A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{026BE97A-FB9A-46ED-AD39-C16393DFF4B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026BE97A-FB9A-46ED-AD39-C16393DFF4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026BE97A-FB9A-46ED-AD39-C16393DFF4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026BE97A-FB9A-46ED-AD39-C16393DFF4B0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{026BE97A-FB9A-46ED-AD39-C16393DFF4B0} = {35648C8A-AB20-47E5-BF9C-250D46657664}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9952D96-781C-499C-A9EF-539A5EB4F949}
+	EndGlobalSection
+EndGlobal
