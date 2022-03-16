@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "PkXQ9UyAkW38TJKE/rCL2B/ChdV04CuyLbPeTexOQko=",
+  "Hash": "+9SGWJrc3FJl0D7l6MH8/8uvfy23MWQrVKu/N5St39s=",
   "Source": "Bpo.Dms.WebApp",
   "BasePath": "_content/Bpo.Dms.WebApp",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "Bpo.Dms.WebApp\\wwwroot",
       "Source": "Bpo.Dms.WebApp",
-      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
       "BasePath": "_content/Bpo.Dms.WebApp",
       "Pattern": "**"
     }
@@ -1037,10 +1037,10 @@
       "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\6.0.2\\staticwebassets\\V5\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Identity": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\favicon.ico",
+      "Identity": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\favicon.ico",
       "SourceId": "Bpo.Dms.WebApp",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
       "BasePath": "_content/Bpo.Dms.WebApp",
       "RelativePath": "favicon.ico",
       "AssetKind": "All",
@@ -1054,10 +1054,10 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
-      "Identity": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\images\\logo.png",
+      "Identity": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\images\\logo.png",
       "SourceId": "Bpo.Dms.WebApp",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
       "BasePath": "_content/Bpo.Dms.WebApp",
       "RelativePath": "images/logo.png",
       "AssetKind": "All",
@@ -1071,10 +1071,10 @@
       "OriginalItemSpec": "wwwroot\\images\\logo.png"
     },
     {
-      "Identity": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\is-cache\\0\\7\\d\\6\\6\\f\\9\\7\\8\\5\\6\\e\\07d66f97856e.meta",
+      "Identity": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\is-cache\\0\\7\\d\\6\\6\\f\\9\\7\\8\\5\\6\\e\\07d66f97856e.meta",
       "SourceId": "Bpo.Dms.WebApp",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
       "BasePath": "_content/Bpo.Dms.WebApp",
       "RelativePath": "is-cache/0/7/d/6/6/f/9/7/8/5/6/e/07d66f97856e.meta",
       "AssetKind": "All",
@@ -1088,10 +1088,10 @@
       "OriginalItemSpec": "wwwroot\\is-cache\\0\\7\\d\\6\\6\\f\\9\\7\\8\\5\\6\\e\\07d66f97856e.meta"
     },
     {
-      "Identity": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\is-cache\\0\\7\\d\\6\\6\\f\\9\\7\\8\\5\\6\\e\\07d66f97856e.png",
+      "Identity": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\is-cache\\0\\7\\d\\6\\6\\f\\9\\7\\8\\5\\6\\e\\07d66f97856e.png",
       "SourceId": "Bpo.Dms.WebApp",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
       "BasePath": "_content/Bpo.Dms.WebApp",
       "RelativePath": "is-cache/0/7/d/6/6/f/9/7/8/5/6/e/07d66f97856e.png",
       "AssetKind": "All",
@@ -1105,10 +1105,10 @@
       "OriginalItemSpec": "wwwroot\\is-cache\\0\\7\\d\\6\\6\\f\\9\\7\\8\\5\\6\\e\\07d66f97856e.png"
     },
     {
-      "Identity": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\is-cache\\7\\7\\4\\4\\4\\b\\4\\0\\0\\d\\c\\f\\77444b400dcf.meta",
+      "Identity": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\is-cache\\7\\7\\4\\4\\4\\b\\4\\0\\0\\d\\c\\f\\77444b400dcf.meta",
       "SourceId": "Bpo.Dms.WebApp",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
       "BasePath": "_content/Bpo.Dms.WebApp",
       "RelativePath": "is-cache/7/7/4/4/4/b/4/0/0/d/c/f/77444b400dcf.meta",
       "AssetKind": "All",
@@ -1122,10 +1122,10 @@
       "OriginalItemSpec": "wwwroot\\is-cache\\7\\7\\4\\4\\4\\b\\4\\0\\0\\d\\c\\f\\77444b400dcf.meta"
     },
     {
-      "Identity": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\is-cache\\7\\7\\4\\4\\4\\b\\4\\0\\0\\d\\c\\f\\77444b400dcf.png",
+      "Identity": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\is-cache\\7\\7\\4\\4\\4\\b\\4\\0\\0\\d\\c\\f\\77444b400dcf.png",
       "SourceId": "Bpo.Dms.WebApp",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\Project\\bpo-dms\\bpo-dms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\wwwroot\\",
       "BasePath": "_content/Bpo.Dms.WebApp",
       "RelativePath": "is-cache/7/7/4/4/4/b/4/0/0/d/c/f/77444b400dcf.png",
       "AssetKind": "All",

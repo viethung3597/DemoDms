@@ -30,7 +30,7 @@ try
 
     builder.Services.AddControllers(opts =>
     {
-        opts.Filters.Add(new AuthorizeFilter());
+        //opts.Filters.Add(new AuthorizeFilter());
         opts.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
     });
     builder.Services.AddRazorPages();
