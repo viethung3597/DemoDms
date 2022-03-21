@@ -87,6 +87,20 @@ declare namespace API {
   };
 
   type undefinedParams = {
+    search: string;
+  };
+
+  type undefinedParams = {
+    search?: string;
+    pageIndex?: number;
+    pageSize?: number;
+  };
+
+  type undefinedParams = {
+    id: number;
+  };
+
+  type undefinedParams = {
     key?: string;
   };
 }

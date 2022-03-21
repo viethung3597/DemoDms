@@ -7,6 +7,7 @@ using Bpo.Dms.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using Bpo.Dms.WebApp.Service;
 
 namespace Bpo.Dms.WebApp.Controllers
 {
@@ -26,6 +27,36 @@ namespace Bpo.Dms.WebApp.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> Get()
         {
             return await _appDb.Products.ToListAsync();
+        }
+
+        [HttpGet("search/{search}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetData(string search)
+        {
+            var products = await _appDb.Products.ToListAsync();
+            if (!String.IsNullOrEmpty(search))
+            {
+                products = products.Where(s => s.Name.Contains(search)).ToList();
+            }
+            return Ok(products);
+        }
+
+        [HttpGet("action")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetAction(string search, int? pageIndex, int pageSize)
+        {
+            var products = from s in _appDb.Products
+                           select s;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                products = products.Where(s => s.Name.Contains(search));
+            }
+
+            if (pageSize <= 0)
+            {
+                pageSize = 1;
+            }
+            return Ok(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageIndex ?? 1, pageSize));
+
         }
 
         [HttpPut]
@@ -65,11 +96,11 @@ namespace Bpo.Dms.WebApp.Controllers
             return Ok();
         }
 
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete(ProductModel model)
+        [IgnoreAntiforgeryToken]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var product = await _appDb.Products.FindAsync(model.Id);
+            var product = _appDb.Products.Where(x => x.Id == id).FirstOrDefault();
             if (product == null)
             {
                 return NotFound();
