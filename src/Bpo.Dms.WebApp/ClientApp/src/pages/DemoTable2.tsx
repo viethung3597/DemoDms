@@ -350,7 +350,7 @@ const EditableTable = () => {
           },
         }}
         bordered
-        dataSource={dataSource}
+        dataSource={data}
         columns={mergedColumns}
         rowClassName="editable-row"
         pagination={{
