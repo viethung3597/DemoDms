@@ -4,7 +4,9 @@ import { Card, Alert, Typography, List } from 'antd';
 import { useIntl, FormattedMessage } from 'umi';
 import styles from './Welcome.less';
 import { getWeatherForecast } from '@/services/dms/WeatherForecast';
-import DemoTable2 from './DemoTable2';
+import Map from './Map';
+import Map2 from './Map2';
+import Map3 from './Map3';
 // import ProTable from './ProTable';
 
 const CodePreview: React.FC = ({ children }) => (
@@ -56,8 +58,9 @@ const Welcome: React.FC = () => {
         </Typography.Text>
         <CodePreview>
           {/* <ProTable /> */}
-          <DemoTable2 />
-          {/* <h1>hello world</h1> */}
+          <Map/>
+          <Map2/>
+          <Map3/>
         </CodePreview>
         
 

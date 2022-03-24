@@ -8,6 +8,7 @@ import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import defaultSettings from '../config/defaultSettings';
 import Cookies from 'js-cookie';
 import { getAccountProfile } from './services/dms/Account';
+// import 'mapbox-gl/dist/mapbox-gl.css';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';

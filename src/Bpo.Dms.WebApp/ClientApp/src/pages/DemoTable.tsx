@@ -2,28 +2,23 @@ import { useRef, useState, useEffect } from 'react';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { ModalForm, ProFormText, ProFormDigit, ProFormDatePicker, ProFormSelect, LightFilter } from '@ant-design/pro-form';
-import { getProducts, postProducts, deleteProductsById, putProducts, getProductsSearchBySearch } from '@/services/dms/Products';
+import { ProductsService } from '@/services/services/ProductsService';
 import { PlusOutlined, SettingOutlined, FullscreenOutlined } from '@ant-design/icons';
 import { Button, Form, message } from 'antd';
 
 // async function requestProduct(params: any, sorter: any, filter: any) {
 //   console.log(params, sorter, filter);
-//   return await getProducts();
+//   return await ProductsService.getApiProducts();
 // }
 
-var dataSource: API.Product[] = [];
-getProducts().then(data => data.forEach(product => dataSource.push(product)));
+// var dataSource: API.Product[] = [];
+// ProductsService.getApiProducts().then(data => data.forEach((product:any) => dataSource.push(product)));
 
 const columns: ProColumns[] = [
   {
     title: 'Id',
     dataIndex: 'id',
     editable: false,
-    // search: {
-    //   onSearch: (value: string) => {
-    //     console.log(dataSource); 
-    //   },
-    // },
   },
   {
     title: 'Mã sản phẩm',
@@ -78,12 +73,12 @@ const columns: ProColumns[] = [
             try {
               let id = record.id;
               // dataSource=[]
-              await deleteProductsById(id);
-              getProducts().then(data => {
-                data.forEach(x => dataSource.push(x))
+              await ProductsService.deleteApiProducts(id);
+              ProductsService.getApiProducts().then(data => {
+                data.forEach((x:any) => dataSource.push(x))
               })
               message.success(`Xóa sản phẩm ${record.name} thành công`);
-              action?.reload()
+              // action?.reloadAndRest()
               return true;
             } catch (e: any) {
               message.error('Lỗi');
@@ -118,15 +113,12 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = (props) => {
       }
       autoFocusFirstInput
       onFinish={async (values) => {
-        
-        // dataSource=[]
         console.log(values);
         
         try {
-          await postProducts(values);
-          getProducts().then(data => {
-            data.forEach(x => dataSource.push(x))
-          })
+          await ProductsService.postApiProducts(values);
+          const data = ProductsService.getApiProducts()
+          setData(data);
           message.success('Tạo sản phẩm mới thành công');
           form.resetFields();
           props.onFinish();
@@ -159,24 +151,22 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = (props) => {
 
 const TableComponents: React.FC<ProductCreateFormProps> = (props) => {
   const actionRef = useRef<ActionType>();
+  const [data,setData] = useState([])
+
+  useEffect( async () => {
+    const data = await ProductsService.getApiProducts()
+    
+      setData(data);
+    }, [])
   // var dataSource = [];
   // console.log(keyword);
   
-  // getProducts().then(data => data.forEach(product => dataSource.push(product)));
+  // ProductsService.getApiProducts().then(data => data.forEach(product => dataSource.push(product)));
   // if (keyword) {
   //   dataSource = []
-  //   getProductsSearchBySearch(keyword).then(data => dataSource.push(...data))
+  //   ProductsService.getApiProducts1(keyword).then(data => dataSource.push(...data))
   //   console.log(dataSource);
-    
   // }
-  const [dataProduct, setDataProduct] = useState(dataSource)
-  console.log(dataProduct);
-
-  // useEffect(() => {
-  //   console.log(dataProduct);
-    
-  // }, [dataProduct])
-  
   
   return (
     <ProTable<API.Product>
@@ -184,12 +174,11 @@ const TableComponents: React.FC<ProductCreateFormProps> = (props) => {
       actionRef={actionRef}
       request={(params, sorter, filter) => {
         if(params.keyword) {
-          dataSource = []
-          getProductsSearchBySearch(params.keyword).then(data => dataSource.push(...data))
-          setDataProduct(dataSource)
+          const data = ProductsService.getApiProducts1(params.keyword)
+          setData(data)
         }
         return Promise.resolve({
-          data: dataSource,
+          data: data,
           success: true,
         });
       }}
@@ -211,7 +200,6 @@ const TableComponents: React.FC<ProductCreateFormProps> = (props) => {
             }}
           />,
         ];
-        
       }}
       // search={false}
       options={{search: true}}
@@ -219,7 +207,7 @@ const TableComponents: React.FC<ProductCreateFormProps> = (props) => {
         onSave: async (key: any, row: any, originRow: any, newLine?: any) => {
           row.productType = row.productType * 1
           try {
-            await putProducts(row);
+            await ProductsService.putApiProducts(row);
             message.success('Cập nhật sản phẩm thành công');
             actionRef.current?.cancelEditable(row.index);
             return true;
@@ -230,7 +218,7 @@ const TableComponents: React.FC<ProductCreateFormProps> = (props) => {
         },
         onCancel: async ( key: any, row: any, originRow: any, newLine?: any ) => {
           try {
-            await putProducts(originRow);
+            await ProductsService.putApiProducts(originRow);
             actionRef.current?.cancelEditable(originRow.index);
             return true;
           } catch (e: any) {

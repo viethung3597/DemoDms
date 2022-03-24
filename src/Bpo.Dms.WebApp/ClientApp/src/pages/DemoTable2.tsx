@@ -1,29 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Typography, message, Button, Modal, Select, DatePicker } from 'antd';
-import { getProducts, postProducts, deleteProductsById, putProducts } from '@/services/dms/Products';
-import { PlusOutlined } from '@ant-design/icons';
-
-const { Search } = Input
-// import { Button, Form, message } from 'antd';
-
-// for (let i = 0; i < 100; i++) {
-//   originData.push({
-//     key: i.toString(),
-//     name: `Edrward ${i}`,
-//     age: 32,
-//     address: `London Park no. ${i}`,
-//   });
-// }
+import { Table, Input, InputNumber, Popconfirm, Form, Typography, message, Button, Modal, Select, DatePicker, Pagination } from 'antd';
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { ProductsService } from '@/services';
 
 const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
+  editing, dataIndex, title, inputType, record, index, children, ...restProps
 }) => {
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
   return (
@@ -49,58 +30,44 @@ const EditableCell = ({
     </td>
   );
 };
-var dataSource: API.Product[] = [];
-getProducts().then((data:any) => data.forEach((product:any) => dataSource.push(product)));
 
 const EditableTable = () => {
-
   const [form] = Form.useForm();
-  const [data, setData] = useState(dataSource);
+  const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
   const [loading, setLoading] = useState(false)
-  // const actionRef = useRef<ActionType>();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [totalItem, setTotalItem] = useState(0);
 
-  // useEffect(() => {
+  useEffect(async () => {
+    const data = await ProductsService.getApiProducts()
 
-  // }, [dataSource])
+    setData(data);
+  }, [])
 
-  const isEditing = (record:any) => record.id === editingKey;
+  const isEditing = (record: any) => record.id === editingKey;
 
-  const edit = (record:any) => {
-    console.log(record.id);
-    
+  const edit = (record: any) => {
+
     form.setFieldsValue({
-      // id: '',
-      // code: '',
-      // name: '',
-      // productType: '',
-      // description: '',
-      // product: '',
-      // date: '',
+      // id: '', code: '', name: '', productType: '', description: ["0", "1", "2"], product: '', date: '',
       ...record,
     });
     setEditingKey(record.id);
   };
 
-  const deleteProduct = async (record:any) => {
-    // console.log(record);
-    console.log(record.id);
+  const deleteProduct = async (record: any) => {
     var result = confirm(`Bạn có muốn xóa ${record.name} không?`)
     if (result) {
       try {
-        
-        await deleteProductsById({
-          params: {id:1}
-        });
-        getProducts().then((data:any) => {
-          data.forEach((x:any) => dataSource.push(x))
-        })
+        await ProductsService.deleteApiProducts(record.id);
         message.success(`Xóa sản phẩm ${record.name} thành công`);
-        // action?.reload()
-        return true;
       } catch (e: any) {
         message.error('Lỗi');
-        return false;
+      } finally {
+        var dataProduct: API.Product[] = [];
+        await ProductsService.getApiProducts().then((data: any) => data.forEach((product: any) => dataProduct.push(product)))
+        setData(dataProduct);
       }
     }
   }
@@ -108,35 +75,23 @@ const EditableTable = () => {
   const cancel = () => {
     setEditingKey('');
   };
+  const saveProduct = async (id: number) => {
+    console.log({ id });
 
-  const save = async (id:number) => {
     try {
       const row = await form.validateFields();
-      console.log(row);
-      console.log(id);
-      
-      
-      await putProducts(row)
+      row.productType = row.productType * 1
+      let rowNew = { id, ...row }
+      await ProductsService.patchApiProducts(rowNew)
       message.success('Cập nhật sản phẩm thành công');
-
+      setEditingKey('');
       return true
-      // const newData = [...data];
-      // const index = newData.findIndex((item) => id === item.id);
-
-
-
-      // if (index > -1) {
-      //   const item = newData[index];
-      //   newData.splice(index, 1, { ...item, ...row });
-      //   await putProducts(newData);
-      //   setEditingKey('');
-      // } else {
-      //   newData.push(row);
-      //   await putProducts(newData);
-      //   setEditingKey('');
-      // }
     } catch (errInfo) {
       console.log('Lỗi: ', errInfo);
+    } finally {
+      var dataProduct: API.Product[] = [];
+      await ProductsService.getApiProducts().then((data: any) => data.forEach((product: any) => dataProduct.push(product)))
+      setData(dataProduct);
     }
   };
 
@@ -145,65 +100,108 @@ const EditableTable = () => {
       title: 'Id',
       dataIndex: 'id',
       editable: false,
-      // search: {
-      //   onSearch: (value: string) => {
-      //     console.log(dataSource); 
-      //   },
-      // },
     },
     {
       title: 'Mã sản phẩm',
       dataIndex: 'code',
       editable: true,
+      sorter: true,
     },
     {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
       editable: true,
+      sorter: true,
+      // sorter: (a, b) => a.name.length - b.name.length,
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
+        return <Input
+          autoFocus
+          placeholder='Nhập tên sản phẩm'
+          value={selectedKeys[0]}
+          onChange={(e) => {
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }}
+          onPressEnter={() => {
+            confirm();
+          }}
+          onBlur={() => {
+            confirm();
+          }}
+        >
+
+        </Input>
+      },
+      filterIcon: () => {
+        return <SearchOutlined />
+      },
     },
     {
       title: 'Loại sản phẩm',
       dataIndex: 'productType',
-      // filters: true,
-      // onFilter: true,
-      valueEnum: {
-        0: { text: 'All' },
-        1: { text: 'Unresolved'},
-        2: { text: 'Resolved'},
-      },
       editable: true,
+      render: (text, row, index) => {
+        if (text == 0) {
+          return <span>Tất cả</span>
+        }
+        if (text == 1) {
+          return <span>Loại 1</span>
+        }
+        if (text == 2) {
+          return <span>Loại 2</span>
+        }
+      },
+      // filters: [
+      //   {
+      //     text: 'Tất cả',
+      //     value: 0,
+      //   },
+      //   {
+      //     text: 'Loại 1',
+      //     value: 1,
+      //   },
+      //   {
+      //     text: 'Loại 2',
+      //     value: 2,
+      //   },
+      // ],
+      // onFilter: (value, record) => record.productType === value,
     },
     {
       title: 'Mô tả sản phẩm',
       dataIndex: 'description',
       editable: true,
+      sorter: true,
     },
     {
       title: 'Giá sản phẩm',
       dataIndex: 'price',
       editable: true,
+      sorter: true,
     },
     {
       title: 'Ngày nhập sản phẩm',
       dataIndex: 'importDate',
-      // type: 'date',
+      valueType: 'date',
       editable: true,
+      sorter: true,
+      render: (text) => {
+        return text.slice(0, 10)
+      }
     },
     {
       title: 'Tùy chọn',
       dataIndex: 'operation',
-      render: (_:any, record:any) => {
-        
+      render: (_: any, record: any) => {
+
         const editable = isEditing(record);
         return editable ? (
           <span>
             <Typography.Link
-              onClick={() => save(record.id)}
               style={{
                 marginRight: 8,
               }}
             >
-              <Button>Save</Button>
+              <Button onClick={() => saveProduct(record.id)}>Save</Button>
             </Typography.Link>
             <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
               <Button>Cancel</Button>
@@ -212,99 +210,92 @@ const EditableTable = () => {
         ) : (
           <>
             <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+              {/* onClick={() => edit(record)} */}
               <Button>Edit</Button>
             </Typography.Link>
-            <Button style={{marginLeft: "10px"}} onClick={() => deleteProduct(record)}>Delete</Button>
+            <Button style={{ marginLeft: "10px" }} onClick={() => deleteProduct(record)}>Delete</Button>
           </>
         );
       },
     },
   ];
+
   const mergedColumns = columns.map((col) => {
-    // console.log(col);
     if (!col.editable) {
       return col;
     }
 
     return {
       ...col,
-      onCell: (record:any) => ({
+      onCell: (record: any) => ({
         record,
-        // inputType: col.dataIndex === 'age' ? 'number' : 'text',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
       }),
     };
   });
-  const onSearch = (value:any) => console.log(value);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const onSearch = async (value:string) => {
+  //   try {
+  //       const data = await ProductsService.getApiProducts1(value)
+  //       setData(data)
+  //     // }
+  //   } catch (err) {
+  //     console.log('Lỗi: ', err);
+  //   }
+  // }
 
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  // const handleOk = async (values) => {
-  //   setIsModalVisible(false);
-  //   // onOk={async (values) => {
-  //     console.log(values);
-      
-
-  //     // dataSource=[]
-  //     // try {
-  //     //   await postProducts(values);
-  //     //   getProducts().then(data => {
-  //     //     data.forEach(x => dataSource.push(x))
-  //     //   })
-  //     //   message.success('Tạo sản phẩm mới thành công');
-  //     //   form.resetFields();
-  //     //   // props.onFinish();
-  //     //   return true;
-  //     // } catch (e: any) {
-  //     //   message.error('Lỗi');
-  //     // return false;
-  //     // }
-  //   // }}
-  // };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
+  const onChange = async (pagination: any, filters: any, sorter: any, extra: any) => {
+    var sort = "";
+    if (sorter.order == undefined) {
+      sorter.order = "";
+    }
+    sort = sorter.field + sorter.order;
+
+    // var dataA: ProductList[] = []
+    const dataA = await ProductsService.getApiProductsAction(filters.name, sort, pagination.current, pagination.pageSize);
+    setTotalItem(dataA.totalItem);
+    setData(dataA.content.result);
+
+  }
+
   return (
     <Form form={form} component={false}>
-      <div style={{display: 'flex', justifyContent: 'space-between', padding: "20px 40px"}}>
-        <Search placeholder="Nhập tên sản phẩm..." onSearch={onSearch} style={{ width: 200 }} />
-        <Button type="primary" onClick={showModal}><PlusOutlined/> Add</Button>
-        <Modal 
-          title="Thêm sản phẩm mới" 
-          visible={isModalVisible} 
-          onOk={ async () => {
+      <div style={{ float: "right", padding: "20px 40px" }}>
+        {/* <Search placeholder="Nhập tên sản phẩm..." onSearch={onSearch} style={{ width: 200 }} /> */}
+        <Button type="primary" onClick={showModal}><PlusOutlined /> Add</Button>
+        <Modal
+          title="Thêm sản phẩm mới"
+          visible={isModalVisible}
+          onOk={async () => {
             form
-            // try {
               .validateFields()
-              .then(values => {
-                setLoading(true)
+              .then(async (values) => {
                 console.log(values);
-                
+
                 if (values) {
-                  postProducts(values);
-                
-                  // getProducts().then(data => {
-                  //   data.forEach(x => dataSource.push(x))
-                  // })
+                  await ProductsService.postApiProducts(values);
                   message.success('Tạo sản phẩm mới thành công');
                   setIsModalVisible(false);
                   form.resetFields();
-                  setLoading(false);
+                  let dataProduct: API.Product[] = [];
+                  await ProductsService.getApiProducts().then((data: any) => data.forEach((product: any) => dataProduct.push(product)))
+                  setData(dataProduct);
                 }
               })
-              // } catch (e) {
-                // }
-                .catch(info => {
-                  message.error('Lỗi');
-                });
-              }}
+              .catch(info => {
+                message.error('Lỗi');
+              });
+          }}
           onCancel={handleCancel}
         >
           <Form
@@ -312,9 +303,6 @@ const EditableTable = () => {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 18 }}
             layout="horizontal"
-            // initialValues={}
-            // onValuesChange={onFormLayoutChange}
-            // size={componentSize as SizeType}
           >
             <Form.Item label="Mã sản phẩm" name="code" rules={[{ required: true }]}>
               <Input />
@@ -336,12 +324,12 @@ const EditableTable = () => {
               <InputNumber />
             </Form.Item>
             <Form.Item label="Ngày nhập sản phẩm" name="importDate" rules={[{ required: true }]}>
-              <DatePicker  />
+              <DatePicker />
             </Form.Item>
           </Form>
         </Modal>
       </div>
-      <Table
+      <Table<API.Product>
         loading={loading}
         rowKey="id"
         components={{
@@ -349,192 +337,24 @@ const EditableTable = () => {
             cell: EditableCell,
           },
         }}
-        bordered
         dataSource={data}
         columns={mergedColumns}
         rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
+        bordered={true}
+        pagination={
+          {
+            defaultCurrent: 1,
+            total: totalItem,
+            defaultPageSize: 5,
+            showLessItems: true,
+            showSizeChanger: true,
+            pageSizeOptions: [5, 10, 20, 30, 40, 50],
+          }
+        }
+        onChange={onChange}
       />
     </Form>
   );
 };
 
 export default React.memo(EditableTable)
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState } from 'react';
-// // import { Table, Tag, Space } from 'antd';
-// import { getProducts, postProducts, deleteProductsById, putProducts } from '@/services/dms/Products';
-// import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
-
-// // const { Column, ColumnGroup } = Table;
-
-// var dataSource: API.Product[] = [];
-// getProducts().then(data => data.forEach(product => dataSource.push(product)));
-
-// // const dataSource = [
-// //   {
-// //     key: '1',
-// //     name: 'Mike',
-// //     age: 32,
-// //     address: '10 Downing Street',
-// //   },
-// //   {
-// //     key: '2',
-// //     name: 'John',
-// //     age: 42,
-// //     address: '10 Downing Street',
-// //   },
-// // ];
-
-// const columns = [
-//   {
-//     title: 'Id',
-//     dataIndex: 'id',
-//     editable: false,
-//     // search: {
-//     //   onSearch: (value: string) => {
-//     //     console.log(dataSource); 
-//     //   },
-//     // },
-//   },
-//   {
-//     title: 'Mã sản phẩm',
-//     dataIndex: 'code',
-//   },
-//   {
-//     title: 'Tên sản phẩm',
-//     dataIndex: 'name',
-//   },
-//   {
-//     title: 'Loại sản phẩm',
-//     dataIndex: 'productType',
-//     // filters: true,
-//     // onFilter: true,
-//     valueEnum: {
-//       0: { text: 'All' },
-//       1: { text: 'Unresolved'},
-//       2: { text: 'Resolved'},
-//     },
-//   },
-//   {
-//     title: 'Mô tả sản phẩm',
-//     dataIndex: 'description',
-//   },
-//   {
-//     title: 'Giá sản phẩm',
-//     dataIndex: 'price',
-//   },
-//   {
-//     title: 'Ngày nhập sản phẩm',
-//     dataIndex: 'importDate',
-//     valueType: 'date',
-//   },
-//   {
-//     title: 'Tùy chọn',
-//     valueType: 'option',
-//     render: (_: any, record: Item) => {
-//       const editable = isEditing(record);
-//       return editable ? (
-//         <span>
-//           <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-//             Save
-//           </Typography.Link>
-//           <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-//             <a>Cancel</a>
-//           </Popconfirm>
-//         </span>
-//       ) : (
-//         <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-//           Edit
-//         </Typography.Link>
-//       );
-//     },
-//     // render: (text, record, _, action) => [
-//     //   <a
-//     //     key="editable"
-//     //     onClick={ () => {
-//     //       action?.startEditable?.(record.id);
-//     //     }}
-//     //   >
-//     //     Sửa
-//     //   </a>,
-//     //   <a
-//     //     key="delete"
-//     //     onClick={ async () => {
-//     //       var result = confirm("Bạn có muốn xóa không?")
-          
-//     //       if (result) {
-//     //         try {
-//     //           let id = record.id;
-//     //           // dataSource=[]
-//     //           await deleteProductsById(id);
-//     //           getProducts().then(data => {
-//     //             data.forEach(x => dataSource.push(x))
-//     //           })
-//     //           message.success(`Xóa sản phẩm ${record.name} thành công`);
-//     //           action?.reload()
-//     //           return true;
-//     //         } catch (e: any) {
-//     //           message.error('Lỗi');
-//     //           return false;
-//     //         }
-//     //       }
-//     //     }}
-//     //   >
-//     //     Xóa
-//     //   </a>,
-//     // ],
-//   },
-// ];
-
-// export default () => {
-//   const [data, setData] = useState(dataSource)
-//     return (
-//         <Table dataSource={data} columns={columns}>
-//             {/* <ColumnGroup title="Name">
-//                 <Column title="First Name" dataIndex="firstName" key="firstName" />
-//                 <Column title="Last Name" dataIndex="lastName" key="lastName" />
-//             </ColumnGroup> */}
-//             {/* <Column title="Id" dataIndex="id" key="id" />
-//             <Column title="Code" dataIndex="code" key="code" />
-//             <Column title="Name" dataIndex="name" key="name" />
-//             <Column
-//                 title="Tags"
-//                 dataIndex="tags"
-//                 key="tags"
-//                 render={tags => (
-//                 <>
-//                     {tags.map((tag:any) => (
-//                     <Tag color="blue" key={tag}>
-//                         {tag}
-//                     </Tag>
-//                     ))}
-//                 </>
-//                 )}
-//             />
-//             <Column
-//                 title="Action"
-//                 key="action"
-//                 render={(text, record : any) => (
-//                 <Space size="middle">
-//                     <a>Invite {record.lastName}</a>
-//                     <a>Delete</a>
-//                 </Space>
-//                 )}
-//             /> */}
-//         </Table>
-//     );
-// };

@@ -41,7 +41,7 @@ export async function getProductsSearchBySearch(
   options?: { [key: string]: any },
 ) {
   const { search: param0, ...queryParams } = params;
-  return request<API.Product[]>(`/api/Products/search/${params}`, {
+  return request<API.Product[]>(`/api/Products/search/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
@@ -70,9 +70,7 @@ export async function deleteProductsById(
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  console.log(param0);
-  
-  return request<any>(`/api/Products/${params}`, {
+  return request<any>(`/api/Products/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
     ...(options || {}),

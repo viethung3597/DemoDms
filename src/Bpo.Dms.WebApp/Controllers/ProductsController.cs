@@ -14,7 +14,7 @@ namespace Bpo.Dms.WebApp.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    public class ProductsController : Controller
+    public class ProductsController : ControllerBase
     {
         private readonly AppDbContext _appDb;
 
@@ -29,37 +29,97 @@ namespace Bpo.Dms.WebApp.Controllers
             return await _appDb.Products.ToListAsync();
         }
 
-        [HttpGet("search/{search}")]
+        [HttpGet("{search}")]
         public async Task<ActionResult<IEnumerable<Product>>> GetData(string search)
         {
             var products = await _appDb.Products.ToListAsync();
             if (!String.IsNullOrEmpty(search))
             {
-                products = products.Where(s => s.Name.Contains(search)).ToList();
+                products = products.Where(s => s.Name.Contains(search) || s.Description.Contains(search) || s.Code.Contains(search)).ToList();
             }
             return Ok(products);
         }
 
         [HttpGet("action")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetAction(string search, int? pageIndex, int pageSize)
+        public async Task<ActionResult<IEnumerable<ProductList>>> GetAction(string search, string sort, int? pageIndex, int pageSize)
         {
+
             var products = from s in _appDb.Products
                            select s;
 
+            switch (sort)
+            {
+                case "nameascend":
+                    products = products.OrderBy(s => s.Name);
+                    break;
+                case "namedescend":
+                    products = products.OrderByDescending(s => s.Name);
+                    break;
+                case "name":
+                    products = products.OrderBy(s => s.Id);
+                    break;
+                case "codeascend":
+                    products = products.OrderBy(s => s.Code);
+                    break;
+                case "codedescend":
+                    products = products.OrderByDescending(s => s.Code);
+                    break;
+                case "code":
+                    products = products.OrderBy(s => s.Id);
+                    break;
+                case "descriptionascend":
+                    products = products.OrderBy(s => s.Code);
+                    break;
+                case "descriptiondescend":
+                    products = products.OrderByDescending(s => s.Code);
+                    break;
+                case "description":
+                    products = products.OrderBy(s => s.Id);
+                    break;
+                case "priceascend":
+                    products = products.OrderBy(s => s.Price);
+                    break;
+                case "pricedescend":
+                    products = products.OrderByDescending(s => s.Price);
+                    break;
+                case "price":
+                    products = products.OrderBy(s => s.Id);
+                    break;
+                case "importDateascend":
+                    products = products.OrderBy(s => s.ImportDate);
+                    break;
+                case "importDatedescend":
+                    products = products.OrderByDescending(s => s.ImportDate);
+                    break;
+                case "importDate":
+                    products = products.OrderBy(s => s.Id);
+                    break;
+                default:
+                    products = products.OrderBy(s => s.Id);
+                    break;
+            }
+
+            var result = new ProductList();
+
             if (!String.IsNullOrEmpty(search))
             {
-                products = products.Where(s => s.Name.Contains(search));
+                products = products.Where(s => s.Name.Contains(search) || s.Description.Contains(search) || s.Code.Contains(search));
             }
+
+            var totalItem = products.Count();
 
             if (pageSize <= 0)
             {
                 pageSize = 1;
             }
-            return Ok(await PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageIndex ?? 1, pageSize));
+            result.Content = (PaginatedList<Product>.CreateAsync(products.AsNoTracking(), pageIndex ?? 1, pageSize));
+            result.TotalItem = totalItem;
+            return Ok(result);
 
         }
 
-        [HttpPut]
+        [IgnoreAntiforgeryToken]
+        [HttpPatch]
         public async Task<IActionResult> Update(ProductModel model)
         {
             var product = await _appDb.Products.FindAsync(model.Id);
@@ -78,6 +138,7 @@ namespace Bpo.Dms.WebApp.Controllers
             return Ok();
         }
 
+        [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> Create(ProductModel model)
         {
@@ -86,7 +147,7 @@ namespace Bpo.Dms.WebApp.Controllers
                 Code = model.Code,
                 Name = model.Name,
                 Description = model.Description,
-                ImportDate = model.ImportDate,  
+                ImportDate = model.ImportDate,
                 Price = model.Price,
                 ProductType = model.ProductType,
             };
@@ -100,7 +161,7 @@ namespace Bpo.Dms.WebApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var product = _appDb.Products.Where(x => x.Id == id).FirstOrDefault();
+            var product = await _appDb.Products.FirstOrDefaultAsync(x => x.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -128,5 +189,11 @@ namespace Bpo.Dms.WebApp.Controllers
             public DateTime ImportDate { get; set; }
         }
 
+        public class ProductList
+        {
+            //public PaginatedList<Product> Content  { get; set; }
+            public int TotalItem { get; set; }
+            public Task<PaginatedList<Product>> Content { get; internal set; }
+        }
     }
 }
