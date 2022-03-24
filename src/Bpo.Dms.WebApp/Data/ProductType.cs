@@ -13,7 +13,7 @@
         Food = 1,
 
         /// <summary>
-        /// Nước uống
+        /// Đồ uống
         /// </summary>
         Drink = 2,
     }

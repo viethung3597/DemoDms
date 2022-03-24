@@ -41,35 +41,107 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Abp": {
+              "target": "Package",
+              "version": "[7.1.0, )"
+            },
+            "Devart.Data.MySql.EFCore": {
+              "target": "Package",
+              "version": "[8.21.2066, )"
+            },
+            "Devart.Data.MySql.EFCore.NetTopologySuite": {
+              "target": "Package",
+              "version": "[8.21.2066, )"
+            },
+            "Devart.Data.PostgreSql.EFCore": {
+              "target": "Package",
+              "version": "[7.24.2066, )"
+            },
+            "Devart.Data.PostgreSql.EFCore.NetTopologySuite": {
+              "target": "Package",
+              "version": "[7.24.2066, )"
+            },
+            "Devart.Data.SQLite.EFCore": {
+              "target": "Package",
+              "version": "[5.19.2066, )"
+            },
+            "Devart.Data.SQLite.EFCore.NetTopologySuite": {
+              "target": "Package",
+              "version": "[5.19.2066, )"
+            },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.2, )"
+              "version": "[6.0.3, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.2, )"
+              "version": "[6.0.3, )"
             },
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
-              "version": "[6.0.2, )"
+              "version": "[6.0.3, )"
             },
             "Microsoft.AspNetCore.SpaServices.Extensions": {
               "target": "Package",
-              "version": "[6.0.2, )"
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[6.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[6.0.2, )"
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite.NetTopologySuite": {
+              "target": "Package",
+              "version": "[6.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.2, )"
+              "version": "[6.0.3, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[6.0.2, )"
+            },
+            "NetTopologySuite": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "NetTopologySuite.Core": {
+              "target": "Package",
+              "version": "[1.15.3, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql.NetTopologySuite": {
+              "target": "Package",
+              "version": "[6.0.1, )"
             },
             "Serilog.AspNetCore": {
               "target": "Package",
@@ -81,7 +153,11 @@
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.2.3, )"
+              "version": "[6.3.0, )"
+            },
+            "Teradata.EntityFrameworkCore.NetTopologySuite": {
+              "target": "Package",
+              "version": "[3.1.0, )"
             }
           },
           "imports": [
