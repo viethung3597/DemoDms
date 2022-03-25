@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\Bpo.Dms.WebApp.csproj": {}
+    "E:\\demo3\\DemoDms\\src\\Bpo.Dms.WebApp\\Bpo.Dms.WebApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\Bpo.Dms.WebApp.csproj": {
+    "E:\\demo3\\DemoDms\\src\\Bpo.Dms.WebApp\\Bpo.Dms.WebApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\Bpo.Dms.WebApp.csproj",
+        "projectUniqueName": "E:\\demo3\\DemoDms\\src\\Bpo.Dms.WebApp\\Bpo.Dms.WebApp.csproj",
         "projectName": "Bpo.Dms.WebApp",
-        "projectPath": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\Bpo.Dms.WebApp.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\source\\repos\\viethung3597\\DemoDms\\src\\Bpo.Dms.WebApp\\obj\\",
+        "projectPath": "E:\\demo3\\DemoDms\\src\\Bpo.Dms.WebApp\\Bpo.Dms.WebApp.csproj",
+        "packagesPath": "C:\\Users\\Dang Phong\\.nuget\\packages\\",
+        "outputPath": "E:\\demo3\\DemoDms\\src\\Bpo.Dms.WebApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Dang Phong\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "\\\\192.168.11.8\\Nuget": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -178,7 +177,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

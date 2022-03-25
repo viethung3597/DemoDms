@@ -4,9 +4,10 @@ import { Card, Alert, Typography, List } from 'antd';
 import { useIntl, FormattedMessage } from 'umi';
 import styles from './Welcome.less';
 import { getWeatherForecast } from '@/services/dms/WeatherForecast';
-import Table from './Table';
-import DemoTable from './DemoTable';
-// import DemoTable from './DemoTable';
+import Map from './Map';
+import Map2 from './Map2';
+import Map3 from './Map3';
+import DemoTable2 from './DemoTable2';
 // import ProTable from './ProTable';
 
 const CodePreview: React.FC = ({ children }) => (
@@ -32,7 +33,7 @@ const Welcome: React.FC = () => {
   return (
     <PageContainer>
       <Card>
-        <Alert
+        {/* <Alert
           message={intl.formatMessage({
             id: 'pages.welcome.alertMessage',
             defaultMessage: 'Faster and stronger heavy-duty components have been released.',
@@ -44,23 +45,24 @@ const Welcome: React.FC = () => {
             margin: -12,
             marginBottom: 24,
           }}
-        />
+        /> */}
         <Typography.Text strong>
-          <FormattedMessage id="pages.welcome.advancedComponent" defaultMessage="Advanced Form" />{' '}
+          {/* <FormattedMessage id="pages.welcome.advancedComponent" defaultMessage="Advanced Form" />{' '}
           <a
             href="https://procomponents.ant.design/components/table"
             rel="noopener noreferrer"
             target="__blank"
           >
             <FormattedMessage id="pages.welcome.link" defaultMessage="Welcome" />
-          </a>
+          </a> */}
           {/* <ProTable /> */}
         </Typography.Text>
         <CodePreview>
           {/* <ProTable /> */}
-          <Table />
-          {/* <TableAntd /> */}
-          {/* <DemoTable /> */}
+          {/* <DemoTable2/> */}
+          <Map/>
+          {/* <Map2/>
+          <Map3/> */}
         </CodePreview>
 
 

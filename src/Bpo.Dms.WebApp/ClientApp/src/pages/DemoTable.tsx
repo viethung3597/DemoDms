@@ -1,29 +1,24 @@
-import { useRef } from 'react';
-import { ProColumns, ActionType } from '@ant-design/pro-table';
+import { useRef, useState, useEffect } from 'react';
+import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { deleteProductsById, getProducts, getProductsBySearch, postProducts, putProducts } from '@/services/dms/Products';
-import { ModalForm, ProFormDatePicker, ProFormSelect, ProFormText } from '@ant-design/pro-form';
-import { Button, Form, message, Modal } from 'antd';
-import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { ModalForm, ProFormText, ProFormDigit, ProFormDatePicker, ProFormSelect, LightFilter } from '@ant-design/pro-form';
+import { ProductsService } from '@/services/services/ProductsService';
+import { PlusOutlined, SettingOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { Button, Form, message } from 'antd';
 
-var dataSource: API.Product[] = []
+// async function requestProduct(params: any, sorter: any, filter: any) {
+//   console.log(params, sorter, filter);
+//   return await ProductsService.getApiProducts();
+// }
 
-// async function requestData(params: any, sorter: any, filter: any) {
-//     console.log(params, sorter, filter);
-//     return await getProducts();
-//   }
+// var dataSource: API.Product[] = [];
+// ProductsService.getApiProducts().then(data => data.forEach((product:any) => dataSource.push(product)));
 
 const columns: ProColumns[] = [
-  {
-    dataIndex: 'index',
-    valueType: 'indexBorder',
-    width: 48,
-  },
   {
     title: 'Id',
     dataIndex: 'id',
     editable: false,
-    key: 'id',
   },
   {
     title: 'Mã sản phẩm',
@@ -38,13 +33,13 @@ const columns: ProColumns[] = [
   {
     title: 'Loại sản phẩm',
     dataIndex: 'productType',
-    valueType: 'select',
+    filters: true,
+    onFilter: true,
     valueEnum: {
-      0: { text: 'Không xác định'},
-      1: { text: 'Đồ ăn'},
-      2: { text: 'Đồ uống'},
+      0: { text: 'All' },
+      1: { text: 'Unresolved'},
+      2: { text: 'Resolved'},
     },
-    key: 'productType',
   },
   {
     title: 'Mô tả sản phẩm',
@@ -60,71 +55,58 @@ const columns: ProColumns[] = [
     title: 'Ngày nhập sản phẩm',
     dataIndex: 'importDate',
     valueType: 'date',
-    key: 'importDate',
   },
   {
-    title: '',
+    title: 'Tùy chọn',
     valueType: 'option',
-    render: (text, record, index, action) => [
-      <Button type="primary"
+    render: (text, record, _, action) => [
+      <a
         key="editable"
-        onClick={() => {
+        onClick={ () => {
           action?.startEditable?.(record.id);
-          
         }}
       >
         Sửa
-      </Button>,
-      <Button type="primary" danger onClick={() => {
-        return showConfirm(record.id);
-      }}>
+      </a>,
+      <a
+        key="delete"
+        onClick={ async () => {
+          var result = confirm("Bạn có muốn xóa không?")
+          
+          if (result) {
+            try {
+              let id = record.id;
+              // dataSource=[]
+              await ProductsService.deleteApiProducts(id);
+              ProductsService.getApiProducts().then(data => {
+                data.forEach((x:any) => dataSource.push(x))
+              })
+              message.success(`Xóa sản phẩm ${record.name} thành công`);
+              // action?.reloadAndRest()
+              return true;
+            } catch (e: any) {
+              message.error('Lỗi');
+              return false;
+            }
+          }
+        }}
+      >
         Xóa
-      </Button>
+      </a>,
     ],
   },
 ];
-
-
-//tìm kiếm
-
-
-//popup xóa
-const { confirm } = Modal;
-function showConfirm(id : any) {
-  confirm({
-    content: "Bạn muốn xóa bản ghi này ?",
-    icon: <ExclamationCircleOutlined />,
-    onOk() {
-      try {
-        deleteProductsById(id);
-        dataSource = [];
-        getProducts().then(data => {
-          data.forEach(x => dataSource.push(x))
-        });
-        message.success('Xóa sản phẩm mới thành công');
-      } catch (e: any) {
-        message.error('Lỗi');
-      }
-    },
-    onCancel() {
-      
-    },
-  });
-}
-
-getProducts().then(data => {
-  data.forEach(x => dataSource.push(x))
-});
 
 interface ProductCreateFormProps {
   onFinish: () => void | Promise<void>;
 }
 
 const ProductCreateForm: React.FC<ProductCreateFormProps> = (props) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm()
+
   return (
     <ModalForm<API.ProductModel>
-      title="Tạo sản phẩm mới khoản mới"
+      title="Tạo mới sản phẩm"
       width={600}
       form={form}
       trigger={
@@ -135,19 +117,19 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = (props) => {
       }
       autoFocusFirstInput
       onFinish={async (values) => {
+        console.log(values);
+        
         try {
-          await postProducts(values);
-          dataSource = [];
-          getProducts().then(data => {
-            data.forEach(x => dataSource.push(x))
-          });
+          await ProductsService.postApiProducts(values);
+          const data = ProductsService.getApiProducts()
+          setData(data);
           message.success('Tạo sản phẩm mới thành công');
           form.resetFields();
           props.onFinish();
           return true;
         } catch (e: any) {
           message.error('Lỗi');
-          return false;
+        return false;
         }
       }}
     >
@@ -157,22 +139,39 @@ const ProductCreateForm: React.FC<ProductCreateFormProps> = (props) => {
         name="productType"
         label="Loại sản phẩm"
         request={async () => [
-          { label: 'Không xác định', value: 0 },
-          { label: 'Đồ ăn', value: 1 },
-          { label: 'Đồ uống', value: 2 }
+          { label: 'All', value: 0 },
+          { label: 'Unresolved', value: 1 },
+          { label: 'Resolved', value: 2 }
         ]}
-        placeholder="Vui lòng chọn loại sản phẩm"
-        rules={[{ required: true }]}
-      />
-      <ProFormText name="description" label="Mô tả sản phẩm" rules={[{ required: true }]} />
-      <ProFormText name="price" label="Giá sản phẩm" rules={[{ required: true }]} />
-      <ProFormDatePicker name="importDate" label="Ngày nhập sản phẩm" rules={[{ required: true }]}  />
+        placeholder="Please select a country"
+        rules={[{ required: true, message: 'Please select your country!' }]}
+      />  
+      <ProFormText name="description" label="Mô tả" rules={[{ required: true }]} />
+      <ProFormDigit name="price" label="Giá" rules={[{ required: true }]} />
+      <ProFormDatePicker name="importDate" label="Ngày nhập sản phẩm" />
     </ModalForm>
-  );
-};
+  )
+}
 
-export default () => {
+const TableComponents: React.FC<ProductCreateFormProps> = (props) => {
   const actionRef = useRef<ActionType>();
+  const [data,setData] = useState([])
+
+  useEffect( async () => {
+    const data = await ProductsService.getApiProducts()
+    
+      setData(data);
+    }, [])
+  // var dataSource = [];
+  // console.log(keyword);
+  
+  // ProductsService.getApiProducts().then(data => data.forEach(product => dataSource.push(product)));
+  // if (keyword) {
+  //   dataSource = []
+  //   ProductsService.getApiProducts1(keyword).then(data => dataSource.push(...data))
+  //   console.log(dataSource);
+  // }
+  
   return (
     <ProTable<API.Product>
       actionRef={actionRef}
@@ -191,56 +190,66 @@ export default () => {
         }
       }
       columns={columns}
-      rowKey="id"
-      options={{
-        search: true,
+      actionRef={actionRef}
+      request={(params, sorter, filter) => {
+        if(params.keyword) {
+          const data = ProductsService.getApiProducts1(params.keyword)
+          setData(data)
+        }
+        return Promise.resolve({
+          data: data,
+          success: true,
+        });
       }}
       search={false}
-      headerTitle=""
-      pagination={{ pageSize: 5 }}
-        toolBarRender={() => {
-          return [
-            <ProductCreateForm
-              key="add"
-              onFinish={() => {
-                actionRef.current?.reload();
-              }}
-            />,
-          ];
-        }}
-        editable={{
-          onSave: async (key: any, row: any, originRow: any, newLine?: any) => {
-            try {
-              row.productType = + row.productType;
-              await putProducts(row);
-              dataSource = [];
-              getProducts().then(data => {
-                data.forEach(x => dataSource.push(x))
-              });
-              actionRef.current?.cancelEditable(row.index);
-              message.success('Sửa sản phẩm mới thành công');
-              return true;
-            } catch (e: any) {
-              message.error('Lỗi');
-              return false;
-            }
-          },
-          onCancel:async (key: any, row: any, originRow: any, newLine?: any) => {
-            try {
-              dataSource = [];
-              getProducts().then(data => {
-                data.forEach(x => dataSource.push(x))
-              });
-              actionRef.current?.cancelEditable(row.index);
-              return true;
-            } catch (e: any) {
-              return false;
-            }
-          },
-          actionRender: (row, config, defaultDom) => {
-            return [defaultDom.save,defaultDom.cancel];
-          },
-        }}
+      pagination={{
+        pageSize: 5,
+      }}
+      columnsState={{
+        persistenceKey: 'pro-table-singe-demos',
+        persistenceType: 'localStorage',
+      }}
+      rowKey="id"
+      toolBarRender={() => {
+        return [
+          <ProductCreateForm
+            key="add"
+            onFinish={() => {
+              actionRef.current?.reload();
+            }}
+          />,
+        ];
+      }}
+      // search={false}
+      options={{search: true}}
+      editable={{
+        onSave: async (key: any, row: any, originRow: any, newLine?: any) => {
+          row.productType = row.productType * 1
+          try {
+            await ProductsService.putApiProducts(row);
+            message.success('Cập nhật sản phẩm thành công');
+            actionRef.current?.cancelEditable(row.index);
+            return true;
+          } catch (e: any) {
+            message.error('Lỗi cập nhật sản phẩm');
+            return false;
+          }
+        },
+        onCancel: async ( key: any, row: any, originRow: any, newLine?: any ) => {
+          try {
+            await ProductsService.putApiProducts(originRow);
+            actionRef.current?.cancelEditable(originRow.index);
+            return true;
+          } catch (e: any) {
+            return false;
+          }
+        },
+        actionRender: (row, config, defaultDom) => {
+          return [defaultDom.save,  defaultDom.cancel];
+        },
+      }}
     />
   );
 };
+
+export default TableComponents
