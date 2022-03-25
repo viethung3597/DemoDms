@@ -5,6 +5,7 @@ using Serilog;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using NetTopologySuite;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 
 Log.Logger = new LoggerConfiguration()
@@ -24,13 +25,14 @@ try
     // Add services to the container.
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(connectionString));
+        options.UseSqlServer(connectionString, x => x.UseNetTopologySuite()));
+    
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     builder.Services.AddControllers(opts =>
     {
-        opts.Filters.Add(new AuthorizeFilter());
+        //opts.Filters.Add(new AuthorizeFilter());
         opts.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
     });
     builder.Services.AddRazorPages();
@@ -99,6 +101,7 @@ try
     if (app.Environment.IsDevelopment())
     {
         IdentityDataSeeder.SeedTestUsers(app);
+        //StoreDataSeeder.SeedTestStores(app);
     }
     app.Run();
 }

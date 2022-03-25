@@ -3,9 +3,13 @@
 import { request } from 'umi';
 
 /** 此处后端没有提供注释 GET /api/Users */
-export async function getUsers(options?: { [key: string]: any }) {
+export async function getUsers(body: API.DataLoadRequest, options?: { [key: string]: any }) {
   return request<API.UserViewModelDataLoadResult>('/api/Users', {
     method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

@@ -4,6 +4,10 @@ import { Card, Alert, Typography, List } from 'antd';
 import { useIntl, FormattedMessage } from 'umi';
 import styles from './Welcome.less';
 import { getWeatherForecast } from '@/services/dms/WeatherForecast';
+import Table from './Table';
+import DemoTable from './DemoTable';
+// import DemoTable from './DemoTable';
+// import ProTable from './ProTable';
 
 const CodePreview: React.FC = ({ children }) => (
   <pre className={styles.pre}>
@@ -50,8 +54,16 @@ const Welcome: React.FC = () => {
           >
             <FormattedMessage id="pages.welcome.link" defaultMessage="Welcome" />
           </a>
+          {/* <ProTable /> */}
         </Typography.Text>
-        <CodePreview>yarn add @ant-design/pro-table</CodePreview>
+        <CodePreview>
+          {/* <ProTable /> */}
+          <Table />
+          {/* <TableAntd /> */}
+          {/* <DemoTable /> */}
+        </CodePreview>
+
+
         <Typography.Text
           strong
           style={{

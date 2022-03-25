@@ -3,10 +3,14 @@
 // API 更新时间：
 // API 唯一标识：
 import * as Account from './Account';
+import * as Products from './Products';
+import * as Stores from './Stores';
 import * as Users from './Users';
 import * as WeatherForecast from './WeatherForecast';
 export default {
   Account,
+  Products,
+  Stores,
   Users,
   WeatherForecast,
 };
