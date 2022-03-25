@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, useMap, Marker, Popup, SVGOverlay } from 'reac
 import L, { divIcon } from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import { getStores } from '@/services/dms/Stores'
-import markerIcon from 'leaflet/dist/images/marker.png';
+// import markerIcon from 'leaflet/dist/images/marker.png';
 
 function MyMap() {
   const [data, setData] = useState([])
@@ -13,13 +13,13 @@ function MyMap() {
     setData(data);
   }, [])
 
-  const markerIconConst = L.icon({
-    iconUrl: markerIcon,
-    iconRetinaUrl: markerIcon,
-    iconAnchor: [5, 55],
-    popupAnchor: [10, -44],
-    iconSize: [25, 55],
-  });
+  // const markerIconConst = L.icon({
+  //   iconUrl: markerIcon,
+  //   iconRetinaUrl: markerIcon,
+  //   iconAnchor: [5, 55],
+  //   popupAnchor: [10, -44],
+  //   iconSize: [25, 55],
+  // });
 
   console.log(data);
   
@@ -34,7 +34,10 @@ function MyMap() {
               // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker icon={markerIconConst} position={[item.location.lat, item.location.lng]}>
+            <Marker 
+              // icon={markerIconConst} 
+              position={[item.location.lat, item.location.lng]}
+            >
               <Popup>
                 {item.name}
               </Popup>

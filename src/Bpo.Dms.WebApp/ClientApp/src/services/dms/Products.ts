@@ -37,7 +37,7 @@ export async function patchProducts(body: API.ProductModel, options?: { [key: st
 /** 此处后端没有提供注释 GET /api/Products/${param0} */
 export async function getProductsBySearch(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getProductsBySearchParams,
+  params: API.undefinedParams,
   options?: { [key: string]: any },
 ) {
   const { search: param0, ...queryParams } = params;
@@ -51,7 +51,7 @@ export async function getProductsBySearch(
 /** 此处后端没有提供注释 GET /api/Products/action */
 export async function getProductsAction(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getProductsActionParams,
+  params: API.undefinedParams,
   options?: { [key: string]: any },
 ) {
   return request<API.ProductList[]>('/api/Products/action', {
@@ -66,7 +66,7 @@ export async function getProductsAction(
 /** 此处后端没有提供注释 DELETE /api/Products/${param0} */
 export async function deleteProductsById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteProductsByIdParams,
+  params: API.undefinedParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;

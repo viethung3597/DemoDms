@@ -37,7 +37,7 @@ export async function postStores(body: API.StoreModel, options?: { [key: string]
 /** 此处后端没有提供注释 DELETE /api/Stores/${param0} */
 export async function deleteStoresById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteStoresByIdParams,
+  params: API.undefinedParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;

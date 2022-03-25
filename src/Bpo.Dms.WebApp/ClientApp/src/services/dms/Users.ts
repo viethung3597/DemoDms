@@ -41,7 +41,7 @@ export async function postUsers(body: API.UserCreateModel, options?: { [key: str
 /** 此处后端没有提供注释 DELETE /api/Users */
 export async function deleteUsers(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteUsersParams,
+  params: API.undefinedParams,
   options?: { [key: string]: any },
 ) {
   return request<any>('/api/Users', {
