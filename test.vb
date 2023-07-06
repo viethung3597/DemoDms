@@ -18,6 +18,28 @@ Public Class Test
 
         adapter.Fill(table)
         DataGridView1.DataSource = table
+         Dim cDataBase As New clsOracleDB()
+        Dim Ocmd As OracleCommand = New OracleCommand("", cDataBase.con)
 
+        Dim prm_HP_CD As OracleParameter = New OracleParameter("prm_HP_CD", OracleDbType.Int16, ParameterDirection.Input)
+        Dim prm_USER_ID8 As OracleParameter = New OracleParameter("prm_USER_ID8", OracleDbType.Char, ParameterDirection.Input)
+        Dim prm_KOUMOKU_KB As OracleParameter = New OracleParameter("prm_KOUMOKU_KB", OracleDbType.Int16, ParameterDirection.Input)
+        Dim prm_SEQ_NOD As OracleParameter = New OracleParameter("prm_SEQ_NO", OracleDbType.Int16, ParameterDirection.Input)
+        Dim prm_CONFIG_VALUE As OracleParameter = New OracleParameter("prm_CONFIG_VALUE", OracleDbType.Int16, ParameterDirection.Output)
+
+
+        Ocmd.CommandType = CommandType.StoredProcedure
+        Ocmd.CommandText = "PK_USSO_200.gpGetConfigValueByUSER_KANRI_SUB_TBL"
+
+        prm_HP_CD.Value = 0
+        prm_USER_ID8.Value = UserID
+        prm_KOUMOKU_KB.Value = 2
+        prm_SEQ_NOD.Value = 1
+
+        Ocmd.Parameters.Add(prm_HP_CD)
+        Ocmd.Parameters.Add(prm_USER_ID8)
+        Ocmd.Parameters.Add(prm_KOUMOKU_KB)
+        Ocmd.Parameters.Add(prm_SEQ_NOD)
+        Ocmd.Parameters.Add(prm_CONFIG_VALUE)
     End Sub
 End Class
