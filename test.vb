@@ -43,3 +43,5 @@ Public Class Test
         Ocmd.Parameters.Add(prm_CONFIG_VALUE)
     End Sub
 End Class
+
+khai sang : https://www.codeproject.com/Articles/15222/How-to-Use-Stored-Procedures-in-VB6
