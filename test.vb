@@ -55,5 +55,10 @@ https://stackoverflow.com/questions/52934309/insert-data-from-oracle-into-a-data
 set cho column DataPropertyName
 
 
+import csv
+https://stackoverflow.com/questions/48885840/insert-datatable-into-oracle-using-oracledataadapter
+
+
+
 
 
