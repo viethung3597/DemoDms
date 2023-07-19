@@ -47,3 +47,10 @@ End Class
 khai sang : https://www.codeproject.com/Articles/15222/How-to-Use-Stored-Procedures-in-VB6
 
 https://stackoverflow.com/questions/11916091/vb-net-load-datatable-to-datagridview
+
+
+
+//set data field in datagridview vb.net oracle
+https://stackoverflow.com/questions/52934309/insert-data-from-oracle-into-a-datagridview-with-existing-column-names
+
+
