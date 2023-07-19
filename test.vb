@@ -52,5 +52,8 @@ https://stackoverflow.com/questions/11916091/vb-net-load-datatable-to-datagridvi
 
 //set data field in datagridview vb.net oracle
 https://stackoverflow.com/questions/52934309/insert-data-from-oracle-into-a-datagridview-with-existing-column-names
+set cho column DataPropertyName
+
+
 
 
