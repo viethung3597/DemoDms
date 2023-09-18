@@ -1,64 +1,72 @@
-Imports MySql.Data.MySqlClient
-Public Class Test
-    Dim Msg
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-            Dim connection As New SqlConnection("Data Source=DESKTOP-JJ2E3DS\SQLEXPRESS;User ID=sa;Password=viethung97;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
-            Dim table As New DataTable()
-            Dim a As New SqlCommand("select * from PaymentDetails", connection)
-            Dim adapter As New SqlDataAdapter(a)
-            adapter.Fill(table)
-            DataGridView1.DataSource = table
+import json
+import sys
 
-    End Sub
+from io import TextIOWrapper
+from operation_first_legal_action import initialize, get_action, finalize
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-        Dim connection As New MySqlConnection("datasource=DESKTOP-JJ2E3DS\SQLEXPRESS;username=sa;password=viethung97;database=PaymentDetailDb")
-        Dim table As New DataTable()
-        Dim adapter As New MySqlDataAdapter("select * from PaymentDetails", connection)
+# AIと対戦環境とのインターフェースを取るモジュールです。
 
-        adapter.Fill(table)
-        DataGridView1.DataSource = table
-         Dim cDataBase As New clsOracleDB()
-        Dim Ocmd As OracleCommand = New OracleCommand("", cDataBase.con)
+# node.jsからの起動で文字化けしたので、対策をします。
+sys.stdout = TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-        Dim prm_HP_CD As OracleParameter = New OracleParameter("prm_HP_CD", OracleDbType.Int16, ParameterDirection.Input)
-        Dim prm_USER_ID8 As OracleParameter = New OracleParameter("prm_USER_ID8", OracleDbType.Char, ParameterDirection.Input)
-        Dim prm_KOUMOKU_KB As OracleParameter = New OracleParameter("prm_KOUMOKU_KB", OracleDbType.Int16, ParameterDirection.Input)
-        Dim prm_SEQ_NOD As OracleParameter = New OracleParameter("prm_SEQ_NO", OracleDbType.Int16, ParameterDirection.Input)
-        Dim prm_CONFIG_VALUE As OracleParameter = New OracleParameter("prm_CONFIG_VALUE", OracleDbType.Int16, ParameterDirection.Output)
+while True:
+    try:
+        # 標準入力からメッセージを受信します。
+        playername = input('Player Name >> ')
+        message = json.loads(playername)
 
+        # 初期化処理なのか、ターンが回ってきたのか、終了処理なのかをPython3.10で追加されたmatchで分岐します。
+        match message['command']:
+            # 初期化処理。
+            case 'initialize':
+                initialize()
+                print(json.dumps('OK'))
 
-        Ocmd.CommandType = CommandType.StoredProcedure
-        Ocmd.CommandText = "PK_USSO_200.gpGetConfigValueByUSER_KANRI_SUB_TBL"
+            # ターンが回ってきた時。
+            case 'getAction':
+                # AIに実行する手を作成させます。
+                action = get_action(message['state']['layout'],
+                                    message['state']['otherLayout'],
+                                    message['state']['flags'],
+                                    message['state']['hand'],
+                                    message['state']['otherHandLength'],
+                                    message['state']['stockLength'],
+                                    message['state']['playFirst'])
+                # 手を出力します。
+                print(json.dumps(action))
 
-        prm_HP_CD.Value = 0
-        prm_USER_ID8.Value = UserID
-        prm_KOUMOKU_KB.Value = 2
-        prm_SEQ_NOD.Value = 1
+            # 終了処理。
+            case 'finalize':
+                finalize()
+                print(json.dumps('OK'))
 
-        Ocmd.Parameters.Add(prm_HP_CD)
-        Ocmd.Parameters.Add(prm_USER_ID8)
-        Ocmd.Parameters.Add(prm_KOUMOKU_KB)
-        Ocmd.Parameters.Add(prm_SEQ_NOD)
-        Ocmd.Parameters.Add(prm_CONFIG_VALUE)
-    End Sub
-End Class
+    except EOFError:
+        break
+import sys
 
-khai sang : https://www.codeproject.com/Articles/15222/How-to-Use-Stored-Procedures-in-VB6
+# AI本体のモジュールです。このモジュールを修正してみてください。
 
-https://stackoverflow.com/questions/11916091/vb-net-load-datatable-to-datagridview
-
-
-
-//set data field in datagridview vb.net oracle
-https://stackoverflow.com/questions/52934309/insert-data-from-oracle-into-a-datagridview-with-existing-column-names
-set cho column DataPropertyName
+# 初期化します。
+def initialize():
+    print('*** 最初の合法手作戦(Python) ***', '初期化', file=sys.stderr)  # 標準出力は通信で使用するので、標準エラー出力にログを出力します。
 
 
-import csv
-https://stackoverflow.com/questions/48885840/insert-datatable-into-oracle-using-oracledataadapter
+# 手を取得します。
+def get_action(layout, other_layout, flags, hand, other_hand_length, stock_length, play_first):
+    print('最初の合法手を選択します', file=sys.stderr)  # 標準出力は通信で使用するので、標準エラー出力にログを出力します。
+
+    # 合法手の集合を取得します。
+    def get_legal_actions():
+        for i, _ in enumerate(hand):
+            for j, (flag, layout_line) in enumerate(zip(flags, layout)):
+                if flag['owner'] is None and len(layout_line) < 3:  # flag['owner']が0の場合、Pythonだと偽になってしまうので注意！
+                    yield {'from': i, 'to': j}
+
+    # 最初の合法手を選択します。
+    return tuple(get_legal_actions())[0]
 
 
-
-
-
+# 終了します。
+def finalize():
+    print('*** 最初の合法手作戦(Python) ***', '終了', file=sys.stderr)
